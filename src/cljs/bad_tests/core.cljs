@@ -9,9 +9,12 @@
 ;; -------------------------
 ;; Views
 
+(def state (atom 0))
+
 (defn home-page []
-  [:div [:h2 "Welcome to bad-tests"]
-   [:div [:a {:href "#/about"} "go to about page"]]])
+  [:div [:h2#title (str "Welcome to bad-tests, click count is " @state)]
+   [:button#click {:on-click #(swap! state inc)} "Increment!"]])
+
 
 (defn about-page []
   [:div [:h2 "About bad-tests"]

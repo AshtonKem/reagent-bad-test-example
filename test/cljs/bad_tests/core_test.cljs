@@ -32,8 +32,17 @@
       (do (println "Not found: " res)
           false))))
 
+(defn click
+  [el]
+  (let [ev (.createEvent js/document "MouseEvent")]
+    (.initMouseEvent ev "click" true js/window nil 0 0 0 0 false false false false 0 nil)
+    (.dispatchEvent el ev)))
 
 (deftest test-home
   (with-mounted-component (rc/home-page)
     (fn [c div]
-      (is (found-in #"Welcome to" div)))))
+      (let [h2 (.getElementById js/document "title")]
+        (is (= "Welcome to bad-tests, click count is 0" (.-textContent h2))))
+      (click (.getElementById js/document "click"))
+      (let [h2 (.getElementById js/document "title")]
+        (is (= "Welcome to bad-tests, click count is 1" (.-textContent h2)))))))
